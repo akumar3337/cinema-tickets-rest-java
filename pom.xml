@@ -54,6 +54,7 @@
     <!-- overrides for vulnerability - verify and remove if possible when updating parent -->
     <jackson-bom.version>3.1.7</jackson-bom.version>
     <tomcat.version>11.0.26</tomcat.version>
+    <cucumber.version>7.34.6</cucumber.version>
   </properties>
 
   <dependencies>
@@ -70,6 +71,34 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Cucumber functional tests (src/functional-test) -->
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-java</artifactId>
+      <version>${cucumber.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-spring</artifactId>
+      <version>${cucumber.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-junit-platform-engine</artifactId>
+      <version>${cucumber.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-suite</artifactId>
       <scope>test</scope>
     </dependency>
 
@@ -104,19 +133,19 @@
         <artifactId>build-helper-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>add-integration-test-source</id>
+            <id>add-functional-test-source</id>
             <phase>generate-test-sources</phase>
             <goals>
               <goal>add-test-source</goal>
             </goals>
             <configuration>
               <sources>
-                <source>src/integration-test/java</source>
+                <source>src/functional-test/java</source>
               </sources>
             </configuration>
           </execution>
           <execution>
-            <id>add-integration-test-resource</id>
+            <id>add-functional-test-resource</id>
             <phase>generate-test-resources</phase>
             <goals>
               <goal>add-test-resource</goal>
@@ -124,7 +153,7 @@
             <configuration>
               <resources>
                 <resource>
-                  <directory>src/integration-test/resources</directory>
+                  <directory>src/functional-test/resources</directory>
                 </resource>
               </resources>
             </configuration>
@@ -143,6 +172,11 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+          <includes>
+            <include>**/*FT.java</include>
+          </includes>
+        </configuration>
         <executions>
           <execution>
             <goals>
